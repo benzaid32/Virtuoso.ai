@@ -9,7 +9,7 @@ import { ProcessingStatus } from './components/UI/ProcessingStatus';
 import { AudioPlayer } from './components/UI/AudioPlayer';
 import { useAppStore } from './stores/appStore';
 
-function App() {
+export default function App() {
   const { 
     processingState, 
     uploadedFile, 
@@ -116,5 +116,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
