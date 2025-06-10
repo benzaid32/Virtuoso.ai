@@ -46,7 +46,10 @@ export default {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-      }
+      },
+      screens: {
+        'xs': '475px',
+      },
     },
   },
   plugins: [],

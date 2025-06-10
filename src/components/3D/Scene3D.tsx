@@ -44,6 +44,7 @@ export const Scene3D: React.FC = () => {
         }}
         onClick={handleCanvasClick}
         style={{ cursor: 'pointer' }}
+        className="touch-none"
       >
         <Suspense fallback={<LoadingFallback />}>
           <PerspectiveCamera
@@ -81,7 +82,7 @@ export const Scene3D: React.FC = () => {
           <MusicianModels />
           <AudioVisualizer3D />
 
-          {/* Controls */}
+          {/* Controls - Disabled on mobile for better performance */}
           <OrbitControls
             enablePan={false}
             enableZoom={true}
@@ -89,6 +90,8 @@ export const Scene3D: React.FC = () => {
             maxPolarAngle={Math.PI / 2}
             minDistance={3}
             maxDistance={15}
+            enableDamping={true}
+            dampingFactor={0.05}
           />
 
           {/* Fog */}
@@ -97,16 +100,16 @@ export const Scene3D: React.FC = () => {
       </Canvas>
 
       {/* UI Overlay */}
-      <div className="absolute top-24 left-6 text-white/80 text-sm font-mono">
-        <div className="glass-effect p-3 rounded-lg">
-          <div className="flex items-center space-x-2 mb-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span>3D Engine Active</span>
+      <div className="absolute top-20 sm:top-24 left-4 sm:left-6 text-white/80 text-xs sm:text-sm font-mono">
+        <div className="glass-effect p-2 sm:p-3 rounded-lg">
+          <div className="flex items-center space-x-2 mb-1 sm:mb-2">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-xs sm:text-sm">3D Engine Active</span>
           </div>
           <div className="text-xs text-white/60">
             Camera: {cameraMode.toUpperCase()}
           </div>
-          <div className="text-xs text-white/60 mt-1">
+          <div className="text-xs text-white/60 mt-1 hidden sm:block">
             Click to change view
           </div>
         </div>
