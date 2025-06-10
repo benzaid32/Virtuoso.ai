@@ -4,12 +4,54 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Virtuoso Gallery - Immersive Digital Art Experience</title>
+    <title>Virtual Art Gallery 2025 - Retro-Futuristic Terminal Experience</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000000;
+        color: #22c55e;
+        font-family: 'Courier Prime', monospace;
+        overflow: hidden;
+      }
+      
+      /* Terminal cursor animation */
+      .terminal-cursor {
+        animation: blink 1s step-end infinite;
+      }
+      
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+      
+      /* Scanlines effect */
+      .scanlines::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          transparent 50%,
+          rgba(34, 197, 94, 0.03) 50%
+        );
+        background-size: 100% 4px;
+        pointer-events: none;
+        z-index: 1000;
+      }
+      
+      /* CRT screen effect */
+      .crt-screen {
+        background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+      }
+    </style>
   </head>
-  <body>
+  <body class="scanlines crt-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

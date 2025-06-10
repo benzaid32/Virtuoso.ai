@@ -16,6 +16,13 @@ export interface Artwork {
 }
 
 export interface GalleryState {
+  // System state
+  isLoading: boolean;
+  loadingProgress: number;
+  loadingStage: string;
+  systemReady: boolean;
+  showWelcome: boolean;
+  
   // Artworks
   artworks: Artwork[];
   currentArtworkIndex: number;
@@ -34,8 +41,15 @@ export interface GalleryState {
   zoomLevel: number;
   showArtworkInfo: boolean;
   is3DViewActive: boolean;
+  cameraMode: 'idle' | 'desk' | 'monitor' | 'free';
+  audioEnabled: boolean;
   
   // Actions
+  setLoading: (loading: boolean) => void;
+  setLoadingProgress: (progress: number, stage: string) => void;
+  setSystemReady: (ready: boolean) => void;
+  setShowWelcome: (show: boolean) => void;
+  setCameraMode: (mode: 'idle' | 'desk' | 'monitor' | 'free') => void;
   setCurrentArtwork: (index: number) => void;
   nextArtwork: () => void;
   previousArtwork: () => void;
@@ -46,6 +60,7 @@ export interface GalleryState {
   setZoomLevel: (zoom: number) => void;
   toggleArtworkInfo: () => void;
   setIs3DViewActive: (active: boolean) => void;
+  toggleAudio: () => void;
   incrementVisitorCount: () => void;
   updateTime: () => void;
 }
@@ -53,26 +68,26 @@ export interface GalleryState {
 const mockArtworks: Artwork[] = [
   {
     id: '1',
-    title: 'Ethereal Landscape',
-    artist: 'Marina Volkov',
-    year: 2023,
-    medium: 'Digital Oil on Canvas',
-    dimensions: '120 × 80 cm',
-    description: 'A dreamlike landscape that captures the essence of twilight, where reality meets imagination. The piece explores themes of solitude and transcendence through masterful use of light and shadow.',
+    title: 'The Starry Night',
+    artist: 'Vincent van Gogh',
+    year: 1889,
+    medium: 'Oil on Canvas',
+    dimensions: '73.7 × 92.1 cm',
+    description: 'A swirling night sky over a French village, painted during van Gogh\'s stay at the Saint-Paul-de-Mausole asylum. The piece captures the artist\'s unique vision of movement and energy in the cosmos.',
     imageUrl: 'https://images.pexels.com/photos/1266810/pexels-photo-1266810.jpeg?auto=compress&cs=tinysrgb&w=1200',
     category: 'landscape',
-    price: '$12,500',
-    isAvailable: true,
+    price: 'Priceless',
+    isAvailable: false,
     installationType: 'floating-frames'
   },
   {
     id: '2',
-    title: 'Chromatic Resonance',
-    artist: 'David Chen',
+    title: 'Abstract Waves',
+    artist: 'Marina Chen',
     year: 2024,
-    medium: 'Acrylic and Mixed Media',
-    dimensions: '100 × 100 cm',
-    description: 'An explosive symphony of color and form that challenges perception. This abstract masterpiece invites viewers to lose themselves in its vibrant complexity.',
+    medium: 'Digital Art',
+    dimensions: '120 × 80 cm',
+    description: 'A contemporary exploration of fluid dynamics through digital manipulation. The piece represents the intersection of technology and natural phenomena.',
     imageUrl: 'https://images.pexels.com/photos/1509534/pexels-photo-1509534.jpeg?auto=compress&cs=tinysrgb&w=1200',
     category: 'abstract',
     price: '$8,750',
@@ -81,63 +96,70 @@ const mockArtworks: Artwork[] = [
   },
   {
     id: '3',
-    title: 'Urban Solitude',
-    artist: 'Elena Rodriguez',
+    title: 'Urban Geometry',
+    artist: 'David Rodriguez',
     year: 2023,
-    medium: 'Digital Photography',
-    dimensions: '90 × 60 cm',
-    description: 'A haunting portrayal of modern isolation within the urban landscape. The photographer captures the poetry of loneliness in bustling city life.',
+    medium: 'Mixed Media',
+    dimensions: '100 × 100 cm',
+    description: 'A bold geometric composition that captures the rhythm and structure of modern urban architecture through vibrant colors and sharp angles.',
     imageUrl: 'https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    category: 'photography',
+    category: 'contemporary',
+    price: '$12,400',
+    isAvailable: true,
+    installationType: 'geometric-forms'
+  },
+  {
+    id: '4',
+    title: 'Mountain Solitude',
+    artist: 'Elena Volkov',
+    year: 2023,
+    medium: 'Photography',
+    dimensions: '90 × 60 cm',
+    description: 'A breathtaking capture of alpine serenity, where mist meets mountain peaks in perfect harmony. This piece invites contemplation of nature\'s grandeur.',
+    imageUrl: 'https://images.pexels.com/photos/1194420/pexels-photo-1194420.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    category: 'landscape',
     price: '$3,200',
     isAvailable: true,
     installationType: 'light-installation'
   },
   {
-    id: '4',
-    title: 'Metamorphosis',
+    id: '5',
+    title: 'Cosmic Nebula',
     artist: 'James Morrison',
     year: 2024,
-    medium: 'Bronze and Steel',
-    dimensions: '180 × 120 × 80 cm',
-    description: 'A powerful sculptural piece that embodies transformation and growth. The interplay of materials creates a dialogue between strength and fluidity.',
-    imageUrl: 'https://images.pexels.com/photos/1194420/pexels-photo-1194420.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    category: 'sculpture',
-    price: '$45,000',
-    isAvailable: false,
-    installationType: '3d-sculpture'
-  },
-  {
-    id: '5',
-    title: 'Digital Dreams',
-    artist: 'Aria Kim',
-    year: 2024,
-    medium: 'AI-Generated Art',
+    medium: 'Digital Sculpture',
     dimensions: '150 × 100 cm',
-    description: 'A groundbreaking exploration of human-AI collaboration in art creation. This piece questions the boundaries between human creativity and artificial intelligence.',
+    description: 'A mesmerizing journey through cosmic space, rendered with cutting-edge digital techniques to create an otherworldly experience.',
     imageUrl: 'https://images.pexels.com/photos/1183992/pexels-photo-1183992.jpeg?auto=compress&cs=tinysrgb&w=1200',
     category: 'contemporary',
-    price: '$6,800',
+    price: '$15,600',
     isAvailable: true,
     installationType: 'holographic'
   },
   {
     id: '6',
     title: 'Portrait of Time',
-    artist: 'Vincent Laurent',
+    artist: 'Aria Laurent',
     year: 2023,
     medium: 'Oil on Canvas',
     dimensions: '80 × 60 cm',
-    description: 'A masterful portrait that captures not just physical likeness but the essence of temporal passage. Each brushstroke tells a story of moments lived.',
-    imageUrl: 'https://images.pexels.com/photos/1183992/pexels-photo-1183992.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'A masterful portrait that transcends traditional representation, capturing the essence of temporal passage through masterful brushwork.',
+    imageUrl: 'https://images.pexels.com/photos/1266810/pexels-photo-1266810.jpeg?auto=compress&cs=tinysrgb&w=1200',
     category: 'portrait',
-    price: '$15,200',
-    isAvailable: true,
-    installationType: 'geometric-forms'
+    price: '$18,900',
+    isAvailable: false,
+    installationType: '3d-sculpture'
   }
 ];
 
 export const useGalleryStore = create<GalleryState>((set, get) => ({
+  // System state
+  isLoading: true,
+  loadingProgress: 0,
+  loadingStage: 'Initializing Gallery Systems...',
+  systemReady: false,
+  showWelcome: false,
+  
   // Artworks
   artworks: mockArtworks,
   currentArtworkIndex: 0,
@@ -156,8 +178,16 @@ export const useGalleryStore = create<GalleryState>((set, get) => ({
   zoomLevel: 1,
   showArtworkInfo: true,
   is3DViewActive: true,
+  cameraMode: 'idle',
+  audioEnabled: true,
   
   // Actions
+  setLoading: (loading) => set({ isLoading: loading }),
+  setLoadingProgress: (progress, stage) => set({ loadingProgress: progress, loadingStage: stage }),
+  setSystemReady: (ready) => set({ systemReady: ready }),
+  setShowWelcome: (show) => set({ showWelcome: show }),
+  setCameraMode: (mode) => set({ cameraMode: mode }),
+  
   setCurrentArtwork: (index) => {
     const artworks = get().artworks;
     set({ 
@@ -192,6 +222,7 @@ export const useGalleryStore = create<GalleryState>((set, get) => ({
   setZoomLevel: (zoom) => set({ zoomLevel: Math.max(1, Math.min(3, zoom)) }),
   toggleArtworkInfo: () => set((state) => ({ showArtworkInfo: !state.showArtworkInfo })),
   setIs3DViewActive: (active) => set({ is3DViewActive: active }),
+  toggleAudio: () => set((state) => ({ audioEnabled: !state.audioEnabled })),
   incrementVisitorCount: () => set((state) => ({ visitorCount: state.visitorCount + 1 })),
   updateTime: () => set({ currentTime: new Date().toLocaleTimeString() }),
 }));

@@ -1,83 +1,75 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment, PerspectiveCamera, OrbitControls } from '@react-three/drei';
-import { GalleryEnvironment } from './GalleryEnvironment';
+import { Environment } from '@react-three/drei';
+import { DeskEnvironment } from './DeskEnvironment';
 import { ArtInstallation } from './ArtInstallation';
 import { GalleryLighting } from './GalleryLighting';
+import { CameraController } from './CameraController';
 import { LoadingSpinner } from './LoadingSpinner';
+import { useGalleryStore } from '../../stores/galleryStore';
 
-interface Gallery3DProps {
-  className?: string;
-}
+export const Gallery3D: React.FC = () => {
+  const { cameraMode, setCameraMode } = useGalleryStore();
 
-export const Gallery3D: React.FC<Gallery3DProps> = ({ className = '' }) => {
+  const handleCanvasClick = () => {
+    if (cameraMode === 'idle') {
+      setCameraMode('desk');
+    } else if (cameraMode === 'desk') {
+      setCameraMode('monitor');
+    }
+  };
+
   return (
-    <div className={`relative w-full h-full ${className}`}>
+    <div className="fixed inset-0 bg-black">
       <Canvas
         shadows
         dpr={[1, 2]}
         gl={{ 
           antialias: true,
-          alpha: true,
+          alpha: false,
           powerPreference: "high-performance"
         }}
-        className="bg-gradient-to-b from-neutral-900 to-neutral-800"
+        onClick={handleCanvasClick}
+        style={{ cursor: cameraMode !== 'monitor' ? 'pointer' : 'default' }}
       >
         <Suspense fallback={<LoadingSpinner />}>
-          <PerspectiveCamera
-            makeDefault
-            position={[0, 6, 10]}
-            fov={65}
-            near={0.1}
-            far={1000}
-          />
+          <CameraController />
           
-          <OrbitControls
-            enablePan={true}
-            enableZoom={true}
-            enableRotate={true}
-            minDistance={6}
-            maxDistance={20}
-            maxPolarAngle={Math.PI / 2.1}
-            minPolarAngle={Math.PI / 8}
-            target={[0, 2, 0]}
-            autoRotate={false}
-            autoRotateSpeed={0.5}
-          />
-
           {/* Lighting Setup */}
           <GalleryLighting />
-
+          
           {/* Environment */}
-          <Environment preset="studio" />
+          <Environment preset="night" />
           
           {/* 3D Components */}
-          <GalleryEnvironment />
+          <DeskEnvironment />
           <ArtInstallation />
+          
+          {/* Fog for atmosphere */}
+          <fog attach="fog" args={['#000000', 10, 50]} />
         </Suspense>
       </Canvas>
-      
-      {/* Overlay UI Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-4 left-4 pointer-events-auto">
-          <div className="bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 text-white text-sm font-medium border border-amber-500/20">
-            3D Gallery View
-          </div>
-        </div>
-        
-        <div className="absolute top-4 right-4 pointer-events-auto">
-          <div className="bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 text-white text-sm font-medium flex items-center gap-2 border border-amber-500/20">
-            <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
-            Interactive Mode
-          </div>
-        </div>
 
-        <div className="absolute bottom-4 left-4 pointer-events-auto">
-          <div className="bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 text-amber-300 text-xs font-medium border border-amber-500/20">
-            Click & drag to explore • Scroll to zoom
-          </div>
+      {/* UI Overlays */}
+      <div className="absolute top-4 left-4 text-green-400 font-mono text-xs bg-black/80 border border-green-400 px-3 py-2 pointer-events-none">
+        Camera: {cameraMode.toUpperCase()}
+        {cameraMode !== 'monitor' && (
+          <div className="text-yellow-400 mt-1">Click to advance camera</div>
+        )}
+      </div>
+
+      <div className="absolute top-4 right-4 text-green-400 font-mono text-xs bg-black/80 border border-green-400 px-3 py-2 pointer-events-none">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          GALLERY SYSTEMS ONLINE
         </div>
       </div>
+
+      {cameraMode === 'monitor' && (
+        <div className="absolute bottom-4 left-4 text-green-400 font-mono text-xs bg-black/80 border border-green-400 px-3 py-2 pointer-events-none">
+          Press ESC to exit monitor view
+        </div>
+      )}
     </div>
   );
 };
