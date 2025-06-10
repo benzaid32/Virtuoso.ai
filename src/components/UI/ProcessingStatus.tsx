@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, Brain, Waveform, CheckCircle, AlertCircle } from 'lucide-react';
+import { Loader2, Brain, Waves, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 
 const processingSteps = [
-  { id: 'analyzing', name: 'Analyzing Audio', icon: Waveform, description: 'Extracting audio features and patterns' },
+  { id: 'analyzing', name: 'Analyzing Audio', icon: Waves, description: 'Extracting audio features and patterns' },
   { id: 'generating', name: 'AI Generation', icon: Brain, description: 'Creating new instrumental performance' },
   { id: 'processing', name: 'Post-Processing', icon: Loader2, description: 'Applying final audio mastering' },
 ];
