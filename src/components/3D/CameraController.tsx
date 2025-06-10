@@ -1,18 +1,18 @@
 import React, { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
-import { useGalleryStore } from '../../stores/galleryStore';
+import { useMusicStore } from '../../stores/musicStore';
 import * as THREE from 'three';
 
 export const CameraController: React.FC = () => {
-  const { cameraMode } = useGalleryStore();
+  const { cameraMode } = useMusicStore();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const { camera } = useThree();
   
   const cameraPositions = {
     idle: { position: [8, 4, 8], target: [0, 1, 0] },
     desk: { position: [0, 3, 5], target: [0, 1, 0] },
-    monitor: { position: [0, 1.5, 2], target: [0, 0.8, -1] },
+    monitor: { position: [0, 1.5, 2], target: [0, 1.2, -1.5] },
     free: { position: [0, 6, 10], target: [0, 2, 0] }
   };
 

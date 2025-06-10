@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useGalleryStore } from '../../stores/galleryStore';
+import { useMusicStore } from '../../stores/musicStore';
 
 export const BIOSLoader: React.FC = () => {
-  const { setLoadingProgress, setSystemReady, setShowWelcome } = useGalleryStore();
+  const { setLoadingProgress, setSystemReady, setShowWelcome } = useMusicStore();
   const [currentLine, setCurrentLine] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
 
   const biosLines = [
-    'VIRTUAL GALLERY ART EXPERIENCE',
-    'VGA S25 2025-2025 Special Gallery131S',
+    'VIRTUOSO.AI MUSIC GENERATION SYSTEM',
+    'VMS v2.5.1 2025-2025 AI Music Engine',
     '',
     'Released: 01/13/2025',
-    'VBIOS (C)2025 Gallery Systems Inc.,',
+    'VBIOS (C)2025 Virtuoso Systems Inc.,',
     '',
-    'Checking Art Assets : 14000 OK',
-    'LOADING GALLERY ASSETS (6/23)',
+    'Checking AI Models : 8000 OK',
+    'LOADING MUSIC GENERATION ASSETS (12/45)',
     '',
-    'Loaded computerSetupModel    ... 45%',
-    'Loaded environmentTexture    ... 67%',
-    'Loaded artworkDatabase       ... 89%',
-    'Loaded audioSystems          ... 95%',
-    'Loaded galleryInterface      ... 100%',
+    'Loaded neuralNetworkModel    ... 23%',
+    'Loaded audioProcessingCore   ... 45%',
+    'Loaded instrumentSamples     ... 67%',
+    'Loaded waveformAnalyzer      ... 78%',
+    'Loaded musicGenerationAI     ... 89%',
+    'Loaded userInterface         ... 95%',
+    'Loaded audioPlaybackEngine   ... 100%',
     '',
-    'GALLERY SYSTEMS READY',
+    'AI MUSIC GENERATION READY',
     'Press any key to continue...'
   ];
 

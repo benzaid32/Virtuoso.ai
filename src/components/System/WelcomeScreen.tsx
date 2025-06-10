@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useGalleryStore } from '../../stores/galleryStore';
+import { useMusicStore } from '../../stores/musicStore';
 
 export const WelcomeScreen: React.FC = () => {
-  const { setShowWelcome, setLoading } = useGalleryStore();
+  const { setShowWelcome, setLoading } = useMusicStore();
 
   const handleStart = () => {
     setShowWelcome(false);
@@ -22,9 +22,10 @@ export const WelcomeScreen: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-2xl font-bold text-yellow-400"
+            className="text-3xl font-bold text-yellow-400 font-display"
+            style={{ fontFamily: 'Orbitron, monospace' }}
           >
-            Virtual Art Gallery 2025
+            VIRTUOSO.AI
           </motion.h1>
           
           <motion.p
@@ -33,7 +34,7 @@ export const WelcomeScreen: React.FC = () => {
             transition={{ delay: 0.7 }}
             className="text-lg"
           >
-            Immersive Digital Art Experience
+            AI-Powered Music Generation Terminal
           </motion.p>
           
           <motion.div
@@ -43,10 +44,10 @@ export const WelcomeScreen: React.FC = () => {
             className="space-y-4 text-sm"
           >
             <p className="text-yellow-300">
-              WARNING: This experience is best viewed on
+              Import your music • Select instrument/group • Generate AI solos
             </p>
-            <p className="text-yellow-300">
-              a desktop or laptop computer.
+            <p className="text-gray-400">
+              Compatible with WAV, MP3, FLAC audio formats
             </p>
           </motion.div>
           
@@ -57,7 +58,7 @@ export const WelcomeScreen: React.FC = () => {
             className="pt-4"
           >
             <p className="mb-4">
-              Click start to enter the gallery{' '}
+              Initialize music generation system{' '}
               <motion.span
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
@@ -73,7 +74,7 @@ export const WelcomeScreen: React.FC = () => {
               onClick={handleStart}
               className="border border-green-400 px-8 py-3 bg-transparent text-green-400 hover:bg-green-400 hover:text-black transition-all duration-300 font-bold tracking-wider"
             >
-              [START GALLERY]
+              [INITIALIZE SYSTEM]
             </motion.button>
           </motion.div>
         </div>
