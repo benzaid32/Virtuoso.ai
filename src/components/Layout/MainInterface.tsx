@@ -15,7 +15,7 @@ export const MainInterface: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 pt-20 overflow-hidden">
+    <div className="h-full w-full">
       <AnimatePresence mode="wait">
         {currentScreen === 'upload' && (
           <motion.div
@@ -25,7 +25,7 @@ export const MainInterface: React.FC = () => {
             animate="animate"
             exit="exit"
             transition={{ duration: 0.3 }}
-            className="h-full"
+            className="h-full w-full"
           >
             <UploadScreen />
           </motion.div>
@@ -39,7 +39,7 @@ export const MainInterface: React.FC = () => {
             animate="animate"
             exit="exit"
             transition={{ duration: 0.3 }}
-            className="h-full"
+            className="h-full w-full"
           >
             <ProcessingScreen />
           </motion.div>
@@ -53,7 +53,7 @@ export const MainInterface: React.FC = () => {
             animate="animate"
             exit="exit"
             transition={{ duration: 0.3 }}
-            className="h-full"
+            className="h-full w-full"
           >
             <ResultsScreen />
           </motion.div>
